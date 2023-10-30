@@ -1,0 +1,11 @@
+services:
+    app:
+      build: .
+      image: bandonapi:latest
+      container_name: bandonapi
+      restart: always
+      command: /usr/local/bin/gunicorn app.main:app --workers 3 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:5000
+      ports:
+        - "8074:5000"
+      volumes:
+        - .:/app
