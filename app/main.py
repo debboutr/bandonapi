@@ -10,7 +10,7 @@ models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-
+m2y = 1.09361000
 # Dependency
 def get_db():
     db = SessionLocal()
@@ -31,8 +31,11 @@ def read_distances(
     _, _, dist = utils.inverse_transformation(lon, lat, rec.lon, rec.lat)
     home_point = utils.transform_to_UTM(lon, lat)
     geom = to_shape(rec.geom)
+    front = home_point.distance(geom) * m2y
+    back = home_point.hausdorff_distance(geom) * m2y
+    center = dist * m2y
     return dict(
-        front=home_point.distance(geom),
-        center=dist,
-        back=home_point.hausdorff_distance(geom),
+        front=front,
+        center=center,
+        back=back,
     )
