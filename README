@@ -2,5 +2,6 @@
 # TODOS and considerations
 * backing up from gpkg or sqlite?
 [ ] return bearing line to green and orthagonals
+[ ] create URLs/geometries for all courses
 
 
