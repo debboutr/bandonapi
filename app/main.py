@@ -12,6 +12,7 @@ models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
 origins = [
+    "https://nflsuicidepool.vercel.app",
     "http://bandonapi.debbout.info",
     "http://localhost",
     "http://localhost:3000",
