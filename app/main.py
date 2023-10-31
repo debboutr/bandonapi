@@ -1,4 +1,5 @@
 from fastapi import Depends, FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from geoalchemy2.shape import to_shape
 from sqlalchemy.orm import Session
 
@@ -10,7 +11,23 @@ models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
+origins = [
+    "http://bandonapi.debbout.info",
+    "http://localhost",
+    "http://localhost:3000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 m2y = 1.09361000
+
+
 # Dependency
 def get_db():
     db = SessionLocal()
