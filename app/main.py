@@ -1,5 +1,8 @@
-from fastapi import Depends, FastAPI
+from fastapi import Depends, FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+from fastapi.responses import HTMLResponse, RedirectResponse
 from geoalchemy2.shape import to_shape
 from sqlalchemy.orm import Session
 
@@ -28,6 +31,8 @@ app.add_middleware(
 
 m2y = 1.09361000
 
+templates = Jinja2Templates(directory="app/templates")
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # Dependency
 def get_db():
@@ -52,8 +57,9 @@ def read_distances(
     front = home_point.distance(geom) * m2y
     back = home_point.hausdorff_distance(geom) * m2y
     center = dist * m2y
-    return dict(
-        front=front,
-        center=center,
-        back=back,
-    )
+    return schemas.Measurement( front=front, center=center, back=back,)
+
+@app.get("/", response_class=HTMLResponse)
+async def index( request: Request,):
+    context = { "request": request, "greens": range(1, 19) }
+    return templates.TemplateResponse("index.html", context)

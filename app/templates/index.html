@@ -1,0 +1,83 @@
+<!DOCTYPE <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Caddy Control</title>
+    {# <script src="{{ url_for('static', path='js/htmx.min.js') }}"></script> #}
+    <link href="{{ url_for('static', path='css/styles.css') }}" rel="stylesheet">
+  </head>
+  <body>
+    <div class="container">
+      <h1 id="front">Front: </h1>
+      <h1 id="center">Middle: </h1>
+      <h1 id="back">Back: </h1>
+      <div>
+	<select id="green" name="green" class="" required>
+	  {% for green in greens %}
+	  <option value="{{ green }}">{{ green }}</option>
+	  {% endfor %}
+	</select>
+      </div>
+
+      <button onclick="handleLocationClick()" class="navBtn">Measure</button>
+    </div>
+
+  </body>
+
+  <script>
+
+    const front = document.getElementById("front");
+    const center = document.getElementById("center");
+    const back = document.getElementById("back");
+
+    function getSelectedGreen() {
+      let e = document.getElementById("green");
+      let value = e.value;
+      console.log(value);
+      return value;
+    };
+
+    function handleLocationClick() {
+      if (navigator.geolocation) {
+	navigator.geolocation.getCurrentPosition(success, error, options);
+      } else {
+	console.log("Geolocation not supported");
+      }
+    }
+
+    const options = {
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0,
+    };
+
+    function success(position) {
+      const latitude = position.coords.latitude;
+      const longitude = position.coords.longitude;
+      const accuracy = position.coords.accuracy;
+      // const show = true;
+      console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+
+      // fetch(`http://127.0.0.1:8047/green/13??lat=${latitude}&lon=${longitude}`)
+      let green = getSelectedGreen();
+      fetch(
+	//`http://bandonapi.debbout.info/green/13?lat=${latitude}&lon=${longitude}`,
+	`http://localhost:8047/green/${green}?lat=${latitude}&lon=${longitude}`,
+      )
+	.then((response) => response.json())
+	.then((data) => {
+	  console.log(data);
+	  front.textContent = data.front;
+	  center.textContent = data.center;
+	  back.textContent = data.back;
+	})
+	.catch((error) => console.log(error));
+    }
+
+    function error() {
+      alert("Unable to retrieve your location");
+    }
+  </script>
+
+</html>
