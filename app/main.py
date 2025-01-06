@@ -7,7 +7,7 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from geoalchemy2.shape import to_shape
 from sqlalchemy.orm import Session
 
-from .crud import get_grn 
+from .crud import get_intersecting_polys, get_grn 
 from .models import Base
 from .schemas import Measurement
 from .database import SessionLocal, engine
@@ -65,10 +65,14 @@ def read_distances(
         return Measurement(front=0, center=0, back=0)
     # lat, lon = 43.17594092,-124.38642774
     # lat, lon = 43.1847296,-124.3923103 # first tee of trails
-    lat, lon = 43.184750507,-124.392289776
+    # lat, lon = 43.184750507,-124.392289776
+    lat, lon = 43.181944,-124.393064
     rec = get_grn(db, grn_id=grn_id)
     geom = to_shape(rec.geometry)
     home_point = transform_to_UTM(lon, lat)
+    print(f"{home_point.wkt=}")
+    polys = get_intersecting_polys(db, home_point)
+    print(f"{[p for p in polys]=}")
     distances = get_distances(geom, home_point)
     print(f"{distances=}")
     return distances
