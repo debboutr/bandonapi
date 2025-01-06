@@ -5,5 +5,5 @@ from . import models, schemas
 
 
 def get_grn(db: Session, grn_id: int):
-    rec = db.query(models.Green).filter(models.Green.number == grn_id).first()
+    rec = db.query(models.Green).filter(models.Green.green_no == grn_id).first()
     return rec

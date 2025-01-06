@@ -1,8 +1,12 @@
 import pyproj
 from pyproj import Geod
-from shapely.geometry import Point
+from shapely.geometry import Polygon, Point
 from shapely.ops import transform
 
+from .schemas import Measurement
+
+m2y = 1.09361000 # meters to yards
+# m2y = 0.9144 # meters to yards
 
 def transform_to_UTM(lon: float, lat: float) -> Point:
     wgs84 = pyproj.CRS("EPSG:4326")
@@ -11,9 +15,12 @@ def transform_to_UTM(lon: float, lat: float) -> Point:
     pt = Point(lon, lat)
     return transform(project, pt)
 
-
-def inverse_transformation(
-    start_lon: float, start_lat: float, end_lon: float, end_lat: float
-):
-    geod = Geod(ellps="WGS84")
-    return geod.inv(start_lon, start_lat, end_lon, end_lat)
+def get_distances(polygon: Polygon, point: Point) -> Measurement:
+    front = point.distance(polygon) * m2y
+    center = point.distance(polygon.centroid) * m2y
+    back = point.hausdorff_distance(polygon) * m2y
+    return Measurement(
+            front=int(front),
+            center=int(center),
+            back=int(back)
+    )

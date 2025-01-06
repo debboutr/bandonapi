@@ -2,6 +2,6 @@ from pydantic import BaseModel
 
 
 class Measurement(BaseModel):
-    front: float
-    center: float
-    back: float
+    front: int
+    center: int
+    back: int
