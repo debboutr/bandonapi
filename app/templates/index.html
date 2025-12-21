@@ -63,7 +63,7 @@
       let green = getSelectedGreen();
       fetch(
 	//`http://bandonapi.debbout.info/green/13?lat=${latitude}&lon=${longitude}`,
-	`http://localhost:8047/green/${green}?lat=${latitude}&lon=${longitude}`,
+	`http://localhost:8074/green/${green}?lat=${latitude}&lon=${longitude}`,
       )
 	.then((response) => response.json())
 	.then((data) => {

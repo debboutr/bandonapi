@@ -6,9 +6,6 @@ from shapely.geometry import Polygon, Point
 
 from .models import Green
 
-# query = session.query(Lake).filter(
-#             func.ST_Contains(Lake.geom, WKTElement("POINT(4 1)")))
-
 def get_intersecting_polys(db: Session, point: Point):
     rec = db.query(Green).filter(
             # both lines below work!!
@@ -16,7 +13,7 @@ def get_intersecting_polys(db: Session, point: Point):
             Green.geometry.ST_Intersects(WKTElement(point.wkt))
             )
     print(str(rec)) # this is the way to get the SQL!!!
-    print(f"{type(point.wkt)=}")
+    print(f"{point.wkt=}")
     print(f"{[r.category for r in rec]=}")
     return rec
 
