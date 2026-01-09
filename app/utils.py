@@ -5,8 +5,7 @@ from shapely.ops import transform
 
 from .schemas import Measurement
 
-m2y = 1.09361000 # meters to yards
-# m2y = 0.9144 # meters to yards
+m2y = 1.093613 # meters to yards
 
 def transform_to_UTM(lon: float, lat: float) -> Point:
     wgs84 = pyproj.CRS("EPSG:4326")
@@ -20,6 +19,8 @@ def get_distances(polygon: Polygon, point: Point) -> Measurement:
     center = point.distance(polygon.centroid) * m2y
     back = point.hausdorff_distance(polygon) * m2y
     return Measurement(
+            course=polygon.course,
+            hole=polygon.green_no,
             front=int(front),
             center=int(center),
             back=int(back)

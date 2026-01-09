@@ -5,28 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Caddy Control</title>
     {# <script src="{{ url_for('static', path='js/htmx.min.js') }}"></script> #}
-    <link href="{{ url_for('static', path='css/styles.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', path='css/style.css') }}" rel="stylesheet">
   </head>
   <body>
     <div class="container">
-      <h1 id="front">Front: </h1>
-      <h1 id="center">Middle: </h1>
-      <h1 id="back">Back: </h1>
-      <div>
-	<select id="green" name="green" class="" required>
-	  {% for green in greens %}
-	  <option value="{{ green }}">{{ green }}</option>
-	  {% endfor %}
-	</select>
-      </div>
-
-      <button onclick="handleLocationClick()" class="navBtn">Measure</button>
+      <h1><span id="latlon"></span></h1>
+      <h1>Course: <span id="course"></span></h1>
+      <h1>Hole: <span id="hole"></span></h1>
+      <h1>Front: <span id="front"></span></h1>
+      <h1>Middle: <span id="center"></span></h1>
+      <h1>Back: {{greens}}<span id="back"></span></h1>
+      <button onclick="handleLocationClick()" class="btn">Measure</button>
     </div>
-
   </body>
-
   <script>
 
+    const latlon = document.getElementById("latlon");
+    const course = document.getElementById("course");
+    const hole = document.getElementById("hole");
     const front = document.getElementById("front");
     const center = document.getElementById("center");
     const back = document.getElementById("back");
@@ -58,16 +54,23 @@
       const accuracy = position.coords.accuracy;
       // const show = true;
       console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+      const url = "{{greens}}"
+      console.log(url);
+      latlon.textContent = `${latitude},${longitude}`;
 
       // fetch(`http://127.0.0.1:8047/green/13??lat=${latitude}&lon=${longitude}`)
-      let green = getSelectedGreen();
+      let green = 47;
+      let track = 'bandon';
       fetch(
 	//`http://bandonapi.debbout.info/green/13?lat=${latitude}&lon=${longitude}`,
-	`http://localhost:8074/green/${green}?lat=${latitude}&lon=${longitude}`,
+	`${url}measure?track=${track}&green=${green}&lat=${latitude}&lon=${longitude}`,
       )
 	.then((response) => response.json())
 	.then((data) => {
+	  console.log("this is in response");
 	  console.log(data);
+	  course.textContent = data.course;
+	  hole.textContent = data.hole;
 	  front.textContent = data.front;
 	  center.textContent = data.center;
 	  back.textContent = data.back;

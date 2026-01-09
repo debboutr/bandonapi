@@ -4,4 +4,10 @@
   align-items: center;
   /* font-size: 1rem; */
 }
+.btn {
+  height: 20vh;
+  background-color: mediumorchid;
+  font-size: 2em;
+  border-radius: 1em;
+}
 
