@@ -2,6 +2,8 @@ services:
     app:
       build: .
       image: bandonapi:latest
+      environment:
+        - BANDON_API=https://bandonapi.debbout.info
       container_name: bandonapi
       restart: always
       command: /usr/local/bin/gunicorn app.main:app --workers 3 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:5000

@@ -1,4 +1,4 @@
-<!DOCTYPE <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8">
@@ -14,7 +14,7 @@
       <h1>Hole: <span id="hole"></span></h1>
       <h1>Front: <span id="front"></span></h1>
       <h1>Middle: <span id="center"></span></h1>
-      <h1>Back: {{greens}}<span id="back"></span></h1>
+      <h1>Back: <span id="back"></span></h1>
       <button onclick="handleLocationClick()" class="btn">Measure</button>
     </div>
   </body>
@@ -49,13 +49,13 @@
     };
 
     function success(position) {
+      const url = "{{greens}}"
+      console.log(url);
       const latitude = position.coords.latitude;
       const longitude = position.coords.longitude;
       const accuracy = position.coords.accuracy;
       // const show = true;
       console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
-      const url = "{{greens}}"
-      console.log(url);
       latlon.textContent = `${latitude},${longitude}`;
 
       // fetch(`http://127.0.0.1:8047/green/13??lat=${latitude}&lon=${longitude}`)
@@ -63,7 +63,7 @@
       let track = 'bandon';
       fetch(
 	//`http://bandonapi.debbout.info/green/13?lat=${latitude}&lon=${longitude}`,
-	`${url}measure?track=${track}&green=${green}&lat=${latitude}&lon=${longitude}`,
+	`${url}/measure?track=${track}&green=${green}&lat=${latitude}&lon=${longitude}`,
       )
 	.then((response) => response.json())
 	.then((data) => {

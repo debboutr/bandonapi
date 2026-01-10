@@ -1,23 +1,5 @@
 
-# TODOS and considerations
-* backing up from gpkg or sqlite?
+# HOW FAR ARE WE NOW?
+
 [ ] return bearing line to green and orthagonals
 [ ] create URLs/geometries for all courses
-
-
-add course in to path param...
-=> look for lat, lon in relation to total polygon...
-=> if not intersection no course, distances can be null OR 0
-=> if you intersect w/ a 50 m buffer of a green, last green will become
-    current green
-=> if you intersect with a hole poly, course can be updated/maintained
-
-{
-  course: "", null or falsy
-  last_green: 11, would be null or falsy
-  measurements: {
-    front: ...,
-    middle: ...,
-    back: ...,
-  }
-}
