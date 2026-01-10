@@ -1,4 +1,4 @@
 __pycache__/
 venv/
-backup/
-junk.py
+db.sqlite
+spyder_junk.py
