@@ -1,0 +1,13 @@
+services:
+    app:
+      build: .
+      image: bandonapi:latest
+      environment:
+        - BANDON_API=https://bandonapi.debbout.info
+      container_name: bandonapi
+      restart: always
+      command: fastapi run app/main.py --workers 3
+      ports:
+        - "8074:8000"
+      volumes:
+        - .:/app
