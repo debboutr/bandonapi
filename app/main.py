@@ -82,9 +82,12 @@ def read_distances(
     if track == "nowhere":
         return Response(front=0, center=0, back=0)
     # lat, lon = 43.17594092,-124.38642774 # 13th green of trails
-    # lat, lon = 43.17419835396825, -124.38951194528615 # 15 fairway
+    lat, lon = 43.17419835396825, -124.38951194528615 # 15 fairway
     # lat, lon = 43.17637634579635, -124.37251592314665  # home
-    lat, lon = 43.18647178212453, -124.39929791179547  # 16 bandon fairway
+    # lat, lon = 43.18647178212453, -124.39929791179547  # 16 bandon fairway
+    # lat, lon = 43.187306, -124.398222 # 15 bandon tee
+    # lat, lon = 43.188167, -124.390528 # 1st starter shack corner
+    # lat, lon = 43.191472, -124.390361 # 2nd tee
     # lat, lon = 43.1847296,-124.3923103 # 1st tee of trails
     # lat, lon = 43.181944,-124.393064 # 1st green of trails
     t1 = timeit.default_timer()

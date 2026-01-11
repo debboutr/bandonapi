@@ -6,6 +6,35 @@
     <title>Caddy Control</title>
     {# <script src="{{ url_for('static', path='js/htmx.min.js') }}"></script> #}
     <link href="{{ url_for('static', path='css/style.css') }}" rel="stylesheet">
+
+    <style>
+    .toast-container {
+      position: fixed;
+      top: 1rem;
+      right: 1.5rem;
+      display: grid;
+      justify-items: end;
+      gap: 1.5rem;
+    }
+    .toast {
+      font-size: 1.5rem;
+      font-weight: bold;
+      line-height: 1.5rem;
+      padding: .5em 1em;
+      background-color: lightblue;
+      animation: toastIt 3000ms cubic-bezier(0.785, 0.135, 0.15, 0.86) forwards;
+    }
+    @keyframes toastIt {
+      0%, 100% {
+	transform: translateY(-150%);
+	opacity: 0;
+      }
+      10%, 90% {
+	transform: translateY(0);
+	opacity: 1;
+      }
+    }
+    </style>
   </head>
   <body>
     <div class="container">
@@ -18,36 +47,53 @@
       <button onclick="handleLocationClick()" class="btn">Measure</button>
     </div>
   </body>
-  <script>
 
+  <script>
     const latlon = document.getElementById("latlon");
     const course = document.getElementById("course");
     const hole = document.getElementById("hole");
     const front = document.getElementById("front");
     const center = document.getElementById("center");
     const back = document.getElementById("back");
-
-    function getSelectedGreen() {
-      let e = document.getElementById("green");
-      let value = e.value;
-      console.log(value);
-      return value;
-    };
-
-    function handleLocationClick() {
-      if (navigator.geolocation) {
-	navigator.geolocation.getCurrentPosition(success, error, options);
-      } else {
-	console.log("Geolocation not supported");
-      }
-    }
-
     const options = {
       enableHighAccuracy: true,
       timeout: 5000,
       maximumAge: 0,
     };
 
+    function generateToast({
+      message,
+      background = 'tomato',
+      color = '#fffffe',
+      length = '2000ms',
+    }){
+      toastContainer.insertAdjacentHTML('beforeend',
+	`<p
+	class="toast"
+	style="background-color: ${background};
+	color: ${color};
+	animation-duration: ${length}">
+	${message}</p>`
+    )
+      const toast = toastContainer.lastElementChild;
+      toast.addEventListener('animationend', () => toast.remove())
+    }
+    (function initToast(){
+      document.body.insertAdjacentHTML('afterbegin',
+	`<div class="toast-container"></div>`);
+      toastContainer = document.querySelector('.toast-container');
+    })();
+
+    function handleLocationClick() {
+      generateToast({
+	message: '👊 you got this, kid! 👊'
+      })
+      if (navigator.geolocation) {
+	navigator.geolocation.getCurrentPosition(success, error, options);
+      } else {
+	console.log("Geolocation not supported");
+      }
+    }
     function success(position) {
       const url = "{{base_url}}"
       console.log(url);
@@ -57,7 +103,6 @@
       // const show = true;
       console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
       latlon.textContent = `${latitude},${longitude}`;
-
       // fetch(`http://127.0.0.1:8047/green/13??lat=${latitude}&lon=${longitude}`)
       let green = 47;
       let track = 'bandon';
@@ -77,10 +122,8 @@
 	})
 	.catch((error) => console.log(error));
     }
-
     function error() {
       alert("Unable to retrieve your location");
     }
   </script>
-
 </html>
